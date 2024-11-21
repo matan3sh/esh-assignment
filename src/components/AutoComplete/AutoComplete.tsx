@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
-import { useGetDataBySearchTerm } from '../../../../hooks/useGetDataBySearchTerm'
-import { Entity, Films, People, Starships } from '../../../../types'
-import { capitalizeFirstLetter } from '../../../../utils'
+import { useGetDataBySearchTerm } from '../../hooks/useGetDataBySearchTerm'
+import { Entity, Films, People, Starships, Vehicles } from '../../types'
+import { capitalizeFirstLetter } from '../../utils'
 import ItemList from '../ItemList/ItemList'
 import { StyledAutoComplete } from './AutoComplete.styled'
 
@@ -25,10 +25,19 @@ const AutoComplete = ({ searchTerm }: AutoCompleteProps) => {
     isLoading: isLoadingStarships,
     error: errorStarships,
   } = useGetDataBySearchTerm<Starships>(searchTerm, Entity.Starships)
+  const {
+    data: vehicles,
+    isLoading: isLoadingVehicles,
+    error: errorVehicles,
+  } = useGetDataBySearchTerm<Vehicles>(searchTerm, Entity.Vehicles)
 
   const hasData = useMemo(
-    () => people.length > 0 || films.length > 0,
-    [films.length, people.length]
+    () =>
+      people.length > 0 ||
+      films.length > 0 ||
+      starships.length > 0 ||
+      vehicles.length > 0,
+    [films.length, people.length, starships.length, vehicles.length]
   )
 
   return (
@@ -70,6 +79,19 @@ const AutoComplete = ({ searchTerm }: AutoCompleteProps) => {
               renderItem={(starship, index) => (
                 <p key={`${index}-${starship.name}-${starship.model}`}>
                   {starship.name}
+                </p>
+              )}
+            />
+          )}
+          {vehicles.length > 0 && (
+            <ItemList<Vehicles>
+              items={vehicles}
+              isLoading={isLoadingVehicles}
+              error={errorVehicles}
+              title={capitalizeFirstLetter(Entity.Vehicles)}
+              renderItem={(vehicle, index) => (
+                <p key={`${index}-${vehicle.name}-${vehicle.vehicle_class}`}>
+                  {vehicle.name}
                 </p>
               )}
             />

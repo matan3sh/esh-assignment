@@ -35,5 +35,8 @@ export const StyledSearchIcon = styled.div`
   height: 100%;
   display: flex;
   align-items: center;
-  cursor: pointer;
+  svg {
+    font-size: 20px;
+    color: #000;
+  }
 `

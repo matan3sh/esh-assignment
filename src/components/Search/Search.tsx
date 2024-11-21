@@ -1,13 +1,13 @@
 import { CloseOutlined, SearchOutlined } from '@ant-design/icons'
 import { useState } from 'react'
 import { useDebounce } from '../../hooks/useDebounce'
+import AutoComplete from '../AutoComplete/AutoComplete'
 import {
   StyledContainer,
   StyledInput,
   StyledInputContainer,
   StyledSearchIcon,
 } from './Search.styled'
-import AutoComplete from './components/AutoComplete/AutoComplete'
 
 const Search = () => {
   const [searchTerm, setSearchTerm] = useState('')
@@ -15,6 +15,10 @@ const Search = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value)
+  }
+
+  const handleClear = () => {
+    setSearchTerm('')
   }
 
   return (
@@ -28,8 +32,11 @@ const Search = () => {
           autoComplete="off"
         />
         <StyledSearchIcon>
-          <SearchOutlined />
-          <CloseOutlined />
+          {searchTerm ? (
+            <CloseOutlined onClick={handleClear} />
+          ) : (
+            <SearchOutlined />
+          )}
         </StyledSearchIcon>
       </StyledInputContainer>
       <AutoComplete searchTerm={debouncedSearchTerm} />

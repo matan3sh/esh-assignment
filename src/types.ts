@@ -21,3 +21,8 @@ export type Starships = {
   name: string
   model: string
 }
+
+export type Vehicles = {
+  name: string
+  vehicle_class: string
+}

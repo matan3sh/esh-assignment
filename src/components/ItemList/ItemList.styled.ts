@@ -11,7 +11,7 @@ export const StyledCategory = styled(Flex)`
 
 export const StyledCategoryTitle = styled.h3`
   font-size: 14px;
-  padding: 12px;
+  padding: 12px 0 12px 6px;
   font-weight: 600;
   cursor: default;
   color: #485563;
