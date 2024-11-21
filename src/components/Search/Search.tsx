@@ -10,7 +10,6 @@ import {
 } from './Search.styled'
 
 const Search = () => {
-  // const [searchTerm, setSearchTerm] = useState('')
   const [searchTerm, setSearchTerm] = useQueryState('search', parseAsString)
   const debouncedSearchTerm = useDebounce(searchTerm)
 

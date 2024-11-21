@@ -1,11 +1,7 @@
 import Search from '../components/Search/Search'
 
 const HomePage = () => {
-  return (
-    <>
-      <Search />
-    </>
-  )
+  return <Search />
 }
 
 export default HomePage
