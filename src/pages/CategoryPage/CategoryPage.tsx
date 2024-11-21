@@ -1,6 +1,7 @@
-import { Table } from 'antd'
-import { useEffect, useState } from 'react'
+import { Alert, Spin, Table } from 'antd'
+import { useCallback, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import EditPersonModal from '../../components/EditPersonModal/EditPersonModal'
 import { useGetDataByCategory } from '../../hooks/useGetDataByCategory'
 import { People } from '../../types'
 import { capitalizeFirstLetter } from '../../utils'
@@ -15,8 +16,9 @@ const CategoryPage = () => {
     error,
   } = useGetDataByCategory<People>(categoryName)
 
-  // Display only people data
   const [people, setPeople] = useState<People[]>([])
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+  const [selectedPerson, setSelectedPerson] = useState<People | null>(null)
 
   useEffect(() => {
     if (fetchedData) {
@@ -24,32 +26,65 @@ const CategoryPage = () => {
     }
   }, [fetchedData])
 
-  const handleEdit = (name: string) => {
-    console.log(`Edit row with key: ${name}`)
+  const updatePerson = useCallback(
+    (editedPerson: People) => {
+      setPeople((prev) =>
+        prev.map((person) =>
+          person.name === editedPerson.name ? editedPerson : person
+        )
+      )
+    },
+    [setPeople]
+  )
+
+  const deletePerson = useCallback(
+    (personName: string) => {
+      setPeople((prev) => prev.filter((person) => person.name !== personName))
+    },
+    [setPeople]
+  )
+
+  const openEditModal = (person: People) => {
+    setSelectedPerson(person)
+    setIsEditModalOpen(true)
   }
 
-  const handleDelete = (name: string) => {
-    setPeople((prev) => prev.filter((person) => person.name !== name))
+  const closeEditModal = (updatedPerson?: People) => {
+    if (updatedPerson) {
+      updatePerson(updatedPerson)
+    }
+    setSelectedPerson(null)
+    setIsEditModalOpen(false)
   }
 
   const renderContent = () => {
-    if (isLoading) return <p>Loading...</p>
-    if (error) return <p>Error: {error}</p>
+    if (isLoading) return <Spin size="large" />
+    if (error) return <Alert type="error" message={error} showIcon />
     if (people.length === 0) return <p>No data available.</p>
 
     return (
       <Table<People>
-        columns={columns(handleEdit, handleDelete)}
+        columns={columns(deletePerson, openEditModal)}
         dataSource={people}
+        rowKey="name"
       />
     )
   }
 
   return (
-    <StyledContainer vertical justify="center" align="center" gap={16}>
-      <h2>{capitalizeFirstLetter(categoryName || '')}</h2>
-      {renderContent()}
-    </StyledContainer>
+    <>
+      <StyledContainer vertical justify="center" align="center" gap={16}>
+        <h2>{capitalizeFirstLetter(categoryName || '')}</h2>
+        {renderContent()}
+      </StyledContainer>
+      {selectedPerson && (
+        <EditPersonModal
+          open={isEditModalOpen}
+          handleClose={closeEditModal}
+          person={selectedPerson}
+        />
+      )}
+    </>
   )
 }
 

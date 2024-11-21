@@ -3,8 +3,8 @@ import { People } from '../../types'
 import { capitalizeFirstLetter } from '../../utils'
 
 export const columns = (
-  onEdit: (key: string) => void,
-  onDelete: (key: string) => void
+  onDelete: (key: string) => void,
+  handleOpenEditModal: (record: People) => void
 ): TableProps<People>['columns'] => [
   {
     title: 'Name',
@@ -38,7 +38,7 @@ export const columns = (
     key: 'actions',
     render: (_, record) => (
       <Space size="middle">
-        <Button onClick={() => onEdit(record.name)}>Edit</Button>
+        <Button onClick={() => handleOpenEditModal(record)}>Edit</Button>
         <Button danger onClick={() => onDelete(record.name)}>
           Delete
         </Button>
