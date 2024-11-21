@@ -1,27 +1,35 @@
 import { Flex, Input, Modal, Select } from 'antd'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { People } from '../../types'
-import { StyledLabel } from './EditPersonModal.styled'
-import { genderOptions } from './EditPersonModal.utils'
+import { StyledLabel } from './PersonModal.styled'
+import { genderOptions } from './PersonModal.utils'
 
-interface EditPersonModalProps {
+interface PersonModalProps {
   open: boolean
   handleClose: (person?: People) => void
-  person: People
+  person: People | null
 }
 
-const EditPersonModal = ({
-  open,
-  handleClose,
-  person,
-}: EditPersonModalProps) => {
+const PersonModal = ({ open, handleClose, person }: PersonModalProps) => {
   const [formData, setFormData] = useState({
-    name: person?.name || '',
-    birth_year: person?.birth_year || '',
-    gender: person?.gender.toLocaleLowerCase() || '',
-    height: person?.height || 0,
-    mass: person?.mass || 0,
+    name: '',
+    birth_year: '',
+    gender: '',
+    height: 0,
+    mass: 0,
   })
+
+  useEffect(() => {
+    if (person) {
+      setFormData({
+        name: person.name || '',
+        birth_year: person.birth_year || '',
+        gender: person.gender.toLocaleLowerCase() || '',
+        height: person.height || 0,
+        mass: person.mass || 0,
+      })
+    }
+  }, [person])
 
   const handleInputChange = <T,>(key: string, value: T) => {
     setFormData((prev) => ({
@@ -32,14 +40,14 @@ const EditPersonModal = ({
 
   return (
     <Modal
-      title="Edit Person"
+      title={person ? 'Edit Person' : 'Create Person'}
       open={open}
       onOk={() => handleClose(formData)}
       onCancel={() => handleClose()}
       styles={{
         header: { borderBottom: '1px solid #eee', paddingBottom: '12px' },
       }}
-      okText="Update"
+      okText={person ? 'Update' : 'Create'}
       cancelText="Cancel"
     >
       <Flex vertical gap={10}>
@@ -96,4 +104,4 @@ const EditPersonModal = ({
   )
 }
 
-export default EditPersonModal
+export default PersonModal

@@ -1,4 +1,5 @@
 import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom'
+import Breadcrumb from './components/Breadcrumb/Breadcrumb.tsx'
 import Header from './components/Header/Header.tsx'
 import CategoryPage from './pages/CategoryPage/CategoryPage.tsx'
 import HomePage from './pages/HomePage.tsx'
@@ -6,6 +7,7 @@ import HomePage from './pages/HomePage.tsx'
 const Layout = () => (
   <>
     <Header />
+    <Breadcrumb />
     <Outlet />
   </>
 )

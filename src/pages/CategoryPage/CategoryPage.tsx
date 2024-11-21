@@ -1,7 +1,7 @@
 import { Alert, Spin, Table } from 'antd'
 import { useCallback, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import EditPersonModal from '../../components/EditPersonModal/EditPersonModal'
+import PersonModal from '../../components/PersonModal/PersonModal'
 import { useGetDataByCategory } from '../../hooks/useGetDataByCategory'
 import { People } from '../../types'
 import { capitalizeFirstLetter } from '../../utils'
@@ -45,8 +45,8 @@ const CategoryPage = () => {
   )
 
   const openEditModal = (person: People) => {
-    setSelectedPerson(person)
     setIsEditModalOpen(true)
+    setSelectedPerson(person)
   }
 
   const closeEditModal = (updatedPerson?: People) => {
@@ -77,13 +77,11 @@ const CategoryPage = () => {
         <h2>{capitalizeFirstLetter(categoryName || '')}</h2>
         {renderContent()}
       </StyledContainer>
-      {selectedPerson && (
-        <EditPersonModal
-          open={isEditModalOpen}
-          handleClose={closeEditModal}
-          person={selectedPerson}
-        />
-      )}
+      <PersonModal
+        open={isEditModalOpen}
+        handleClose={closeEditModal}
+        person={selectedPerson}
+      />
     </>
   )
 }
