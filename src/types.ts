@@ -9,6 +9,9 @@ export enum Entity {
 
 export type People = {
   name: string
+  gender: string
+  height: string
+  mass: string
   birth_year: string
 }
 
