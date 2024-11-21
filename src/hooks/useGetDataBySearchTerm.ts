@@ -1,38 +1,27 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
 import { getDataBySearchTerm } from '../actions'
 
 export const useGetDataBySearchTerm = <T>(
   searchTerm: string,
   entity: string
 ) => {
-  const [data, setData] = useState<T[]>([])
-  const [error, setError] = useState<string | null>(null)
-  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const fetchData = async (): Promise<T[]> => {
+    const data = await getDataBySearchTerm(searchTerm, entity)
+    return data.results
+  }
 
-  const fetchData = useCallback(
-    async (term: string) => {
-      setIsLoading(true)
-      setError(null)
-      try {
-        const data = await getDataBySearchTerm(term, entity)
-        setData(data.results)
-      } catch (err) {
-        setError(`Failed to fetch ${entity}. Please try again later.`)
-        console.error(`Error fetching ${entity}:`, err)
-      } finally {
-        setIsLoading(false)
-      }
-    },
-    [entity]
-  )
+  const { data, error, isLoading, isError } = useQuery<T[], Error>({
+    queryKey: ['searchData', entity, searchTerm],
+    queryFn: fetchData,
+    enabled: !!searchTerm,
+    retry: 2,
+    staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
+  })
 
-  useEffect(() => {
-    if (searchTerm) {
-      fetchData(searchTerm)
-    } else {
-      setData([])
-    }
-  }, [fetchData, searchTerm])
-
-  return { data, isLoading, error }
+  return {
+    data: data || [],
+    isLoading,
+    error: isError ? error : null,
+  }
 }

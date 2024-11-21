@@ -1,33 +1,25 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { ReactNode } from 'react'
 import { getDataByCategory } from '../actions'
 import { Entity } from '../types'
 
 export const useGetDataByCategory = <T>(category?: string) => {
-  const [data, setData] = useState<T[]>([])
-  const [error, setError] = useState<string | null>(null)
-  const [isLoading, setIsLoading] = useState<boolean>(false)
-
-  const fetchData = useCallback(async (category: string) => {
-    setIsLoading(true)
-    setError(null)
-    try {
-      const data = await getDataByCategory(category)
-      setData(data.results)
-    } catch (err) {
-      setError(`Failed to fetch ${category} items. Please try again later.`)
-      console.error(`Error fetching ${category} items:`, err)
-    } finally {
-      setIsLoading(false)
+  const fetchCategoryData = async (): Promise<T[]> => {
+    if (!category || category !== Entity.People) {
+      throw new Error('Invalid or unsupported category')
     }
-  }, [])
+    const data = await getDataByCategory(category)
+    return data.results
+  }
 
-  useEffect(() => {
-    if (category && category === Entity.People) {
-      fetchData(category)
-    } else {
-      setData([])
-    }
-  }, [fetchData, category])
+  const { data, error, isLoading, isError } = useQuery<T[], ReactNode>({
+    queryKey: ['categoryData', category],
+    queryFn: fetchCategoryData,
+    enabled: !!category && category === Entity.People,
+    retry: 2,
+    staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
+  })
 
-  return { data, isLoading, error }
+  return { data, isLoading, error: isError ? error : null }
 }
