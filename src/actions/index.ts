@@ -11,3 +11,8 @@ export const getDataBySearchTerm = async (
   )
   return response.data
 }
+
+export const getDataByCategory = async (category: string) => {
+  const response = await axios.get(`${BASE_URL}/${category}`)
+  return response.data
+}
