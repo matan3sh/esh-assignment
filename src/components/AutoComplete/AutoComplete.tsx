@@ -49,7 +49,7 @@ const AutoComplete = ({ searchTerm }: AutoCompleteProps) => {
               items={people}
               isLoading={isLoadingPeople}
               error={errorPeople}
-              title={capitalizeFirstLetter(Entity.People)}
+              entity={Entity.People}
               renderItem={(person, index) => (
                 <p key={`${index}-${person.name}-${person.birth_year}`}>
                   {person.name}
@@ -62,7 +62,7 @@ const AutoComplete = ({ searchTerm }: AutoCompleteProps) => {
               items={films}
               isLoading={isLoadingFilms}
               error={errorFilms}
-              title={capitalizeFirstLetter(Entity.Films)}
+              entity={capitalizeFirstLetter(Entity.Films)}
               renderItem={(film, index) => (
                 <p key={`${index}-${film.title}-${film.episode_id}`}>
                   {film.title}
@@ -75,7 +75,7 @@ const AutoComplete = ({ searchTerm }: AutoCompleteProps) => {
               items={starships}
               isLoading={isLoadingStarships}
               error={errorStarships}
-              title={capitalizeFirstLetter(Entity.Starships)}
+              entity={capitalizeFirstLetter(Entity.Starships)}
               renderItem={(starship, index) => (
                 <p key={`${index}-${starship.name}-${starship.model}`}>
                   {starship.name}
@@ -88,7 +88,7 @@ const AutoComplete = ({ searchTerm }: AutoCompleteProps) => {
               items={vehicles}
               isLoading={isLoadingVehicles}
               error={errorVehicles}
-              title={capitalizeFirstLetter(Entity.Vehicles)}
+              entity={capitalizeFirstLetter(Entity.Vehicles)}
               renderItem={(vehicle, index) => (
                 <p key={`${index}-${vehicle.name}-${vehicle.vehicle_class}`}>
                   {vehicle.name}

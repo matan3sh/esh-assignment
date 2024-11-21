@@ -1,7 +1,10 @@
 import { RightOutlined } from '@ant-design/icons'
 import { Alert, Divider, Flex } from 'antd'
+import { Link } from 'react-router-dom'
+import { capitalizeFirstLetter } from '../../utils'
 import {
   StyledCategory,
+  StyledCategoryHeader,
   StyledCategoryTitle,
   StyledViewAll,
 } from './ItemList.styled'
@@ -12,7 +15,7 @@ interface ItemListProps<T> {
   isLoading: boolean
   error: string | null
   renderItem: (item: T, index: number) => React.ReactNode
-  title: string
+  entity: string
   itemsToShow?: number
 }
 
@@ -21,7 +24,7 @@ const ItemList = <T,>({
   isLoading,
   error,
   renderItem,
-  title,
+  entity,
   itemsToShow = 3,
 }: ItemListProps<T>) => {
   const renderContent = () => {
@@ -41,13 +44,19 @@ const ItemList = <T,>({
 
   return (
     <Flex vertical gap={2}>
-      <Flex align="center" justify="space-between">
+      <StyledCategoryHeader align="center" justify="space-between">
         <StyledCategory align="center">
           <RightOutlined />
-          <StyledCategoryTitle>{title}</StyledCategoryTitle>
+          <StyledCategoryTitle>
+            {capitalizeFirstLetter(entity)}
+          </StyledCategoryTitle>
         </StyledCategory>
-        {items.length > itemsToShow && <StyledViewAll>View All</StyledViewAll>}
-      </Flex>
+        {items.length > itemsToShow && (
+          <StyledViewAll>
+            <Link to={`category/${entity}`}>View All</Link>
+          </StyledViewAll>
+        )}
+      </StyledCategoryHeader>
       <Divider />
       {renderContent()}
     </Flex>

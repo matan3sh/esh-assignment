@@ -13,7 +13,7 @@ export const StyledContainer = styled.div`
 
 export const StyledInputContainer = styled.div`
   background-color: white;
-  border-radius: 40px;
+  border-radius: 5px;
   width: 500px;
   min-height: 50px;
   overflow: hidden;

@@ -9,6 +9,10 @@ export const StyledCategory = styled(Flex)`
   }
 `
 
+export const StyledCategoryHeader = styled(Flex)`
+  cursor: default;
+`
+
 export const StyledCategoryTitle = styled.h3`
   font-size: 14px;
   padding: 12px 0 12px 6px;
@@ -23,4 +27,5 @@ export const StyledViewAll = styled.span`
   cursor: pointer;
   margin: 0 12px 0 auto;
   font-weight: 600;
+  width: fit-content;
 `
