@@ -1,11 +1,11 @@
-import { Alert, Spin, Table } from 'antd'
+import { Alert, Button, Spin, Table } from 'antd'
 import { useCallback, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import PersonModal from '../../components/PersonModal/PersonModal'
 import { useGetDataByCategory } from '../../hooks/useGetDataByCategory'
 import { People } from '../../types'
 import { capitalizeFirstLetter } from '../../utils'
-import { StyledContainer } from './CategoryPage.styled'
+import { StyledContainer, StyledHeaderContainer } from './CategoryPage.styled'
 import { columns } from './CategoryPage.utils'
 
 const CategoryPage = () => {
@@ -17,7 +17,7 @@ const CategoryPage = () => {
   } = useGetDataByCategory<People>(categoryName)
 
   const [people, setPeople] = useState<People[]>([])
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedPerson, setSelectedPerson] = useState<People | null>(null)
 
   useEffect(() => {
@@ -25,6 +25,13 @@ const CategoryPage = () => {
       setPeople(fetchedData)
     }
   }, [fetchedData])
+
+  const addPerson = useCallback(
+    (newPerson: People) => {
+      setPeople((prev) => [newPerson, ...prev])
+    },
+    [setPeople]
+  )
 
   const updatePerson = useCallback(
     (editedPerson: People) => {
@@ -45,16 +52,18 @@ const CategoryPage = () => {
   )
 
   const openEditModal = (person: People) => {
-    setIsEditModalOpen(true)
+    setIsModalOpen(true)
     setSelectedPerson(person)
   }
 
-  const closeEditModal = (updatedPerson?: People) => {
-    if (updatedPerson) {
-      updatePerson(updatedPerson)
+  const closeEditModal = (formData?: People) => {
+    if (formData && selectedPerson) {
+      updatePerson(formData)
+    } else if (formData) {
+      addPerson(formData)
     }
     setSelectedPerson(null)
-    setIsEditModalOpen(false)
+    setIsModalOpen(false)
   }
 
   const renderContent = () => {
@@ -73,12 +82,19 @@ const CategoryPage = () => {
 
   return (
     <>
-      <StyledContainer vertical justify="center" align="center" gap={16}>
-        <h2>{capitalizeFirstLetter(categoryName || '')}</h2>
+      <StyledContainer vertical justify="center" align="center">
+        {people && people.length > 0 && (
+          <StyledHeaderContainer align="center" justify="space-between">
+            <h2>{capitalizeFirstLetter(categoryName || '')}</h2>
+            <Button type="primary" onClick={() => setIsModalOpen(true)}>
+              Add Person
+            </Button>
+          </StyledHeaderContainer>
+        )}
         {renderContent()}
       </StyledContainer>
       <PersonModal
-        open={isEditModalOpen}
+        open={isModalOpen}
         handleClose={closeEditModal}
         person={selectedPerson}
       />

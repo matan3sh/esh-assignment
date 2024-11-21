@@ -10,14 +10,16 @@ interface PersonModalProps {
   person: People | null
 }
 
+const INITIAL_FORM_DATA = {
+  name: '',
+  birth_year: '',
+  gender: 'n/a',
+  height: 0,
+  mass: 0,
+}
+
 const PersonModal = ({ open, handleClose, person }: PersonModalProps) => {
-  const [formData, setFormData] = useState({
-    name: '',
-    birth_year: '',
-    gender: '',
-    height: 0,
-    mass: 0,
-  })
+  const [formData, setFormData] = useState(INITIAL_FORM_DATA)
 
   useEffect(() => {
     if (person) {
@@ -38,11 +40,16 @@ const PersonModal = ({ open, handleClose, person }: PersonModalProps) => {
     }))
   }
 
+  const handleOk = () => {
+    handleClose(formData)
+    setFormData(INITIAL_FORM_DATA)
+  }
+
   return (
     <Modal
       title={person ? 'Edit Person' : 'Create Person'}
       open={open}
-      onOk={() => handleClose(formData)}
+      onOk={handleOk}
       onCancel={() => handleClose()}
       styles={{
         header: { borderBottom: '1px solid #eee', paddingBottom: '12px' },
@@ -57,7 +64,7 @@ const PersonModal = ({ open, handleClose, person }: PersonModalProps) => {
             value={formData.name}
             onChange={(e) => handleInputChange<string>('name', e.target.value)}
             placeholder="Enter person name"
-            disabled
+            disabled={!!person}
           />
         </Flex>
         <Flex vertical gap={2}>
