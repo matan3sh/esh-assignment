@@ -33,7 +33,9 @@ This is a React-based application for searching and managing Star Wars entities 
 
 ## UX Improvements
 
-The search input field allows users to quickly find Star Wars entities as they type, with categories displayed dynamically as they narrow down the results. To prevent unnecessary API calls, a `useDebounce` hook is used to delay the search request until the user stops typing, ensuring smoother and more responsive interactions.
+- **Autocomplete Search with Debounce**: The search input field allows users to quickly find Star Wars entities as they type, with categories displayed dynamically as they narrow down the results. To prevent unnecessary API calls, a `useDebounce` hook is used to delay the search request until the user stops typing, ensuring smoother and more responsive interactions.
+
+- **URL Persistence for Search**: The search input fields value is synchronized with the URL query parameters. This means that even if the user refreshes the page, the search term persists in the URL and is automatically reloaded. This allows the user to maintain their search state across page reloads, providing a seamless experience when revisiting the app.
 
 ## Usage
 
