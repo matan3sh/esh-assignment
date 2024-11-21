@@ -51,11 +51,9 @@ const ItemList = <T,>({
             {capitalizeFirstLetter(entity)}
           </StyledCategoryTitle>
         </StyledCategory>
-        {items.length > itemsToShow && (
-          <StyledViewAll>
-            <Link to={`category/${entity}`}>View All</Link>
-          </StyledViewAll>
-        )}
+        <StyledViewAll>
+          <Link to={`category/${entity}`}>View All</Link>
+        </StyledViewAll>
       </StyledCategoryHeader>
       <Divider />
       {renderContent()}
