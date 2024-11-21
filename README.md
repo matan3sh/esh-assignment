@@ -39,5 +39,5 @@ The search input field allows users to quickly find Star Wars entities as they t
 
 - Open Terminal and run `git clone https://github.com/matan3sh/esh-assignment`
 - Go to `cd esh-assignment`
-- Go to `eash-assignment` folder then install dependencies with `npm i` and **run** `npm run dev` running on `http://localhost:5173`
+- Install dependencies with `npm i` and **run** `npm run dev` running on `http://localhost:5173`
 - Open Browser --> http://localhost:5173
