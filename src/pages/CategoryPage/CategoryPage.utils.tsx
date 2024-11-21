@@ -1,6 +1,11 @@
+import { Button, Space, TableProps } from 'antd'
+import { People } from '../../types'
 import { capitalizeFirstLetter } from '../../utils'
 
-export const columns = [
+export const columns = (
+  onEdit: (key: string) => void,
+  onDelete: (key: string) => void
+): TableProps<People>['columns'] => [
   {
     title: 'Name',
     dataIndex: 'name',
@@ -26,5 +31,18 @@ export const columns = [
     title: 'Mass',
     dataIndex: 'mass',
     key: 'mass',
+  },
+  {
+    title: 'Actions',
+    dataIndex: 'actions',
+    key: 'actions',
+    render: (_, record) => (
+      <Space size="middle">
+        <Button onClick={() => onEdit(record.name)}>Edit</Button>
+        <Button danger onClick={() => onDelete(record.name)}>
+          Delete
+        </Button>
+      </Space>
+    ),
   },
 ]
